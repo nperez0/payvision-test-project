@@ -3,7 +3,7 @@ using Refactoring.FraudDetection.Models;
 
 namespace Refactoring.FraudDetection.Handlers.NormalizeHandlers
 {
-    public class NormalizeEmailHandler : IHandler<Order>
+    public class NormalizeEmailHandler : INormalizeHandler
     {
         public Order Handle(Order request)
             => request.UpdateEmail(NormalizeEmail(request.Email));

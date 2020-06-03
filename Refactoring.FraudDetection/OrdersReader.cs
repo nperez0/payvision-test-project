@@ -1,19 +1,19 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using Refactoring.FraudDetection.Handlers.NormalizeHandlers;
 using Refactoring.FraudDetection.Models;
 using Refactoring.FraudDetection.Models.Builders;
+using Refactoring.FraudDetection.Services;
 
 namespace Refactoring.FraudDetection
 {
     public class OrdersReader
     {
-        readonly NormalizeHandler _normalizeHandler;
+        readonly NormalizeService _normalizeService;
 
-        public OrdersReader(NormalizeHandler normalizeHandler)
+        public OrdersReader(NormalizeService normalizeService)
         {
-            _normalizeHandler = normalizeHandler;
+            _normalizeService = normalizeService;
         }
 
         public IEnumerable<Order> GetOrders(string filePath)
@@ -22,7 +22,7 @@ namespace Refactoring.FraudDetection
                 .Select(Normalize);
 
         Order Normalize(Order order)
-            => _normalizeHandler.Handle(order);
+            => _normalizeService.Normalize(order);
 
         static Order CreateOrder(string line)
             => CreateOrder(line.SplitBySemicolon());

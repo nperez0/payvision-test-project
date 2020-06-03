@@ -2,7 +2,7 @@
 
 namespace Refactoring.FraudDetection.Handlers.CheckFraudHandlers
 {
-    public class CheckFraudRequest
+    public struct CheckFraudRequest
     {
         public Order Current { get; }
 

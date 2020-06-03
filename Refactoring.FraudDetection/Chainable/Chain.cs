@@ -25,10 +25,4 @@ namespace Refactoring.FraudDetection
         public static implicit operator T(Chain<T> chain)
             => chain.Value;
     }
-
-    public static class Chainable
-    {
-        public static Chain<T> ToChainable<T>(this T value)
-            => value;
-    }
 }

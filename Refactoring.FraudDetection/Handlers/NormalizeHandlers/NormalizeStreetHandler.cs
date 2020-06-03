@@ -2,7 +2,7 @@
 
 namespace Refactoring.FraudDetection.Handlers.NormalizeHandlers
 {
-    public class NormalizeStreetHandler : IHandler<Order>
+    public class NormalizeStreetHandler : INormalizeHandler
     {
         public Order Handle(Order request)
             => request.UpdateAddress(NormalizeStreet(request.Address));

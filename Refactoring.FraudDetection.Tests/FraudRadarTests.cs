@@ -11,6 +11,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Refactoring.FraudDetection.Handlers.CheckFraudHandlers;
 using Refactoring.FraudDetection.Handlers.NormalizeHandlers;
 using Refactoring.FraudDetection.Models;
+using Refactoring.FraudDetection.Services;
 
 namespace Refactoring.FraudDetection.Tests
 {
@@ -63,8 +64,8 @@ namespace Refactoring.FraudDetection.Tests
 
         private static List<FraudResult> ExecuteTest(string filePath)
         {
-            var normalizeHandlers = GetNormalizeHandler();
-            var checkFraudHandler = GetCheckFraudHandler();
+            var normalizeHandlers = GetNormalizeService();
+            var checkFraudHandler = GetCheckFraudService();
             var ordersReader = new OrdersReader(normalizeHandlers);
             var fraudRadar = new FraudRadar(checkFraudHandler);
 
@@ -73,15 +74,15 @@ namespace Refactoring.FraudDetection.Tests
             return fraudRadar.Check(orders).ToList();
         }
 
-        private static NormalizeHandler GetNormalizeHandler() 
-            => new NormalizeHandler(
+        private static NormalizeService GetNormalizeService() 
+            => new NormalizeService(
                     new NormalizeEmailHandler(),
                     new NormalizeStateHandler(),
                     new NormalizeStreetHandler()
                 );
 
-        private static CheckFraudHandler GetCheckFraudHandler()
-            => new CheckFraudHandler(
+        private static CheckFraudService GetCheckFraudService()
+            => new CheckFraudService(
                     new EmailCreditCardCheckHandler(),
                     new ContactInfoCreditCardCheckHandler()
                 );

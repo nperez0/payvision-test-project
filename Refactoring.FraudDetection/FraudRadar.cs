@@ -7,17 +7,16 @@ namespace Refactoring.FraudDetection
     using System;
     using System.Collections.Generic;
     using System.Linq;
-    using Refactoring.FraudDetection.Handlers.CheckFraudHandlers;
-    using Refactoring.FraudDetection.Handlers.NormalizeHandlers;
     using Refactoring.FraudDetection.Models;
+    using Refactoring.FraudDetection.Services;
 
     public partial class FraudRadar
     {
-        readonly CheckFraudHandler _checkFraudHandler;
+        readonly CheckFraudService _checkFraudService;
 
-        public FraudRadar(CheckFraudHandler checkFraudHandler)
+        public FraudRadar(CheckFraudService checkFraudService)
         {
-            _checkFraudHandler = checkFraudHandler;
+            _checkFraudService = checkFraudService;
         }
 
         public IEnumerable<FraudResult> Check(IEnumerable<Order> orders)
@@ -30,6 +29,6 @@ namespace Refactoring.FraudDetection
             => (current, index) => CheckFraud(current, index, orders);
 
         IEnumerable<FraudResult> CheckFraud(Order current, int index, IEnumerable<Order> orders)
-            => _checkFraudHandler.Handle(current, orders.Skip(index + 1));
+            => _checkFraudService.CheckFraud(current, orders.Skip(index + 1));
     }
 }

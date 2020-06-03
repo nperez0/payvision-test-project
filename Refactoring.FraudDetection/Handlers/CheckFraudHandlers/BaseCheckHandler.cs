@@ -2,7 +2,7 @@
 
 namespace Refactoring.FraudDetection.Handlers.CheckFraudHandlers
 {
-    public abstract class BaseCheckHandler : IHandler<CheckFraudRequest, FraudResult>
+    public abstract class BaseCheckHandler : ICheckFraudHandler
     {
         public FraudResult Handle(CheckFraudRequest request)
             => CheckFraud(request.Current, request.Other)

@@ -1,20 +1,21 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Refactoring.FraudDetection.Handlers.CheckFraudHandlers;
 using Refactoring.FraudDetection.Models;
 
-namespace Refactoring.FraudDetection.Handlers.CheckFraudHandlers
+namespace Refactoring.FraudDetection.Services
 {
-    public class CheckFraudHandler
+    public class CheckFraudService
     {
-        readonly IHandler<CheckFraudRequest, FraudResult>[] _handlers;
+        readonly ICheckFraudHandler[] _handlers;
 
-        public CheckFraudHandler(params IHandler<CheckFraudRequest, FraudResult>[] handlers)
+        public CheckFraudService(params ICheckFraudHandler[] handlers)
         {
             _handlers = handlers;
         }
 
-        public IEnumerable<FraudResult> Handle(Order current, IEnumerable<Order> orders)
+        public IEnumerable<FraudResult> CheckFraud(Order current, IEnumerable<Order> orders)
             => orders
                 .Select(CheckFraud(current))
                 .Where(OnlyFraud);
@@ -28,13 +29,13 @@ namespace Refactoring.FraudDetection.Handlers.CheckFraudHandlers
                 .ToList()
                 .First();
 
-        static Func<IHandler<CheckFraudRequest, FraudResult>, FraudResult> SelectHandler(CheckFraudRequest request, Chain<FraudResult> result)
+        static Func<ICheckFraudHandler, FraudResult> SelectHandler(CheckFraudRequest request, Chain<FraudResult> result)
             => handler => result = ContinueIf(request, result, handler);
 
-        static Chain<FraudResult> ContinueIf(CheckFraudRequest request, Chain<FraudResult> result, IHandler<CheckFraudRequest, FraudResult> handler)
+        static Chain<FraudResult> ContinueIf(CheckFraudRequest request, Chain<FraudResult> result, ICheckFraudHandler handler)
             => result.ContinueIf(CheckFraud(request, handler), IsNotFraudulent);
 
-        static Func<FraudResult> CheckFraud(CheckFraudRequest request, IHandler<CheckFraudRequest, FraudResult> handler)
+        static Func<FraudResult> CheckFraud(CheckFraudRequest request, ICheckFraudHandler handler)
             => () => handler.Handle(request);
 
         static bool IsNotFraudulent(FraudResult result)
