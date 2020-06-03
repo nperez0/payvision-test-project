@@ -28,16 +28,16 @@ namespace Refactoring.FraudDetection.Handlers.CheckFraudHandlers
                 .ToList()
                 .First();
 
-        Func<IHandler<CheckFraudRequest, FraudResult>, FraudResult> SelectHandler(CheckFraudRequest request, Chain<FraudResult> result)
+        static Func<IHandler<CheckFraudRequest, FraudResult>, FraudResult> SelectHandler(CheckFraudRequest request, Chain<FraudResult> result)
             => handler => result = ContinueIf(request, result, handler);
 
-        Chain<FraudResult> ContinueIf(CheckFraudRequest request, Chain<FraudResult> result, IHandler<CheckFraudRequest, FraudResult> handler)
+        static Chain<FraudResult> ContinueIf(CheckFraudRequest request, Chain<FraudResult> result, IHandler<CheckFraudRequest, FraudResult> handler)
             => result.ContinueIf(CheckFraud(request, handler), IsNotFraudulent);
 
-        Func<FraudResult> CheckFraud(CheckFraudRequest request, IHandler<CheckFraudRequest, FraudResult> handler)
+        static Func<FraudResult> CheckFraud(CheckFraudRequest request, IHandler<CheckFraudRequest, FraudResult> handler)
             => () => handler.Handle(request);
 
-        bool IsNotFraudulent(FraudResult result)
+        static bool IsNotFraudulent(FraudResult result)
             => result.IsNotFraudulent;
 
         static bool OnlyFraud(FraudResult result)

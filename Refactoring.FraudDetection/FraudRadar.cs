@@ -14,23 +14,17 @@ namespace Refactoring.FraudDetection
     public partial class FraudRadar
     {
         readonly CheckFraudHandler _checkFraudHandler;
-        readonly NormalizeHandler _normalizeHandler;
 
-        public FraudRadar(CheckFraudHandler checkFraudHandler, NormalizeHandler normalizeHandler)
+        public FraudRadar(CheckFraudHandler checkFraudHandler)
         {
             _checkFraudHandler = checkFraudHandler;
-            _normalizeHandler = normalizeHandler;
         }
 
         public IEnumerable<FraudResult> Check(IEnumerable<Order> orders)
         {
             return orders
-                .Select(Normalize)
                 .SelectMany(CheckFraud(orders));
         }
-
-        Order Normalize(Order order) 
-            => _normalizeHandler.Handle(order);
 
         Func<Order, int, IEnumerable<FraudResult>> CheckFraud(IEnumerable<Order> orders) 
             => (current, index) => CheckFraud(current, index, orders);

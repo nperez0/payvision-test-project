@@ -19,13 +19,13 @@ namespace Refactoring.FraudDetection.Handlers.NormalizeHandlers
                 .ToList()
                 .First();
 
-        Func<IHandler<Order>, Order> SelectHandler(Order order)
+        static Func<IHandler<Order>, Order> SelectHandler(Order order)
             => handler => order = ContinueWith(order, handler);
 
-        Chain<Order> ContinueWith(Chain<Order> order, IHandler<Order> handler)
+        static Chain<Order> ContinueWith(Chain<Order> order, IHandler<Order> handler)
             => order.ContinueWith(Normalize(order, handler));
 
-        Func<Order> Normalize(Chain<Order> order, IHandler<Order> handler)
+        static Func<Order> Normalize(Chain<Order> order, IHandler<Order> handler)
             => () => handler.Handle(order);
     }
 }

@@ -63,10 +63,10 @@ namespace Refactoring.FraudDetection.Tests
 
         private static List<FraudResult> ExecuteTest(string filePath)
         {
-            var ordersReader = new OrdersReader();
             var normalizeHandlers = GetNormalizeHandler();
             var checkFraudHandler = GetCheckFraudHandler();
-            var fraudRadar = new FraudRadar(checkFraudHandler, normalizeHandlers);
+            var ordersReader = new OrdersReader(normalizeHandlers);
+            var fraudRadar = new FraudRadar(checkFraudHandler);
 
             var orders = ordersReader.GetOrders(filePath);
 
